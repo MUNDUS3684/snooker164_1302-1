@@ -7,9 +7,9 @@ enum BallColor
     Yellow,
     Green,
     Brown,
-    Purple,
     Blue,
-    Orange,
+    Pink,
+    Black,
 }
 
 
