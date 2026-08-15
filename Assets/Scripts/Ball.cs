@@ -19,6 +19,7 @@ public class Ball : MonoBehaviour, IPointerClickHandler
 {
     [SerializeField]
     private int point;
+    public int Point { get { return point; } set { point = value; } }
 
     [SerializeField]
     private MeshRenderer rd;
@@ -63,27 +64,27 @@ public class Ball : MonoBehaviour, IPointerClickHandler
                 rd.material.color = Color.red;
                 break;
             case BallColor.Yellow:
-                point = 0;
+                point = 2;
                 rd.material.color = Color.yellow;
                 break;
             case BallColor.Green:
-                point = 0;
+                point = 3;
                 rd.material.color = Color.green;
                 break;
             case BallColor.Brown:
-                point = 0;
+                point = 4;
                 rd.material.color = Color.brown;
                 break;
             case BallColor.Blue:
-                point = 0;
+                point = 5;
                 rd.material.color = Color.blue;
                 break;
             case BallColor.Pink:
-                point = 0;
+                point = 6;
                 rd.material.color = Color.pink;
                 break;
             case BallColor.Black:
-                point = 0;
+                point = 7;
                 rd.material.color = Color.black;
                 break;
         }
