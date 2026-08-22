@@ -53,6 +53,11 @@ public class GameManager : MonoBehaviour
         SetBall(BallColor.Blue, 5);
         SetBall(BallColor.Pink, 6);
         SetBall(BallColor.Black, 7);
+
+        if (Settings.fromSave == true)
+        {
+            LoadGame();
+        }
     }
 
     // Update is called once per frame
@@ -77,6 +82,11 @@ public class GameManager : MonoBehaviour
         else
         {
             xInput = 0f;
+        }
+
+        if (Keyboard.current.leftShiftKey.isPressed && Keyboard.current.sKey.wasPressedThisFrame)
+        {
+            SaveGame();
         }
 
         RotateBall();
@@ -160,6 +170,33 @@ public class GameManager : MonoBehaviour
     {
         GuiScore.text = "Score: " + PlayerScore.ToString();
     }
+
+    public void SaveGame()
+    {
+        StopBall();
+
+        if (cueball != null)
+        {
+            PlayerPrefs.SetFloat("cueBallPosX", cueball.transform.position.x);
+            PlayerPrefs.SetFloat("cueBallPosY", cueball.transform.position.y);
+            PlayerPrefs.SetFloat("cueBallPosZ", cueball.transform.position.z);
+            Debug.Log("Saved");
+        }
+        
+    }
+
+    public void LoadGame()
+    {
+        StopBall();
+        if (cueball != null)
+        {
+            float x = PlayerPrefs.GetFloat("cueBallPosX", 0f);
+            float y = PlayerPrefs.GetFloat("cueBallPosY", 0f);
+            float z = PlayerPrefs.GetFloat("cueBallPosZ", 0f);
+            cueball.transform.position = new Vector3(x, y, z);
+            Debug.Log("Loaded");
+        }
+    }   
 }
 
 

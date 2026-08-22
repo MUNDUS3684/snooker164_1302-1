@@ -36,7 +36,7 @@ public class Loading : MonoBehaviour
         while(!operation.isDone)
         {
             slider.value = operation.progress/0.9f;
-            yield return null;
+            yield return null; //WaitForSeconds(1f);
         }
     }
 }

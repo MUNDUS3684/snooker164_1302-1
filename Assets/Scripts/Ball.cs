@@ -4,7 +4,7 @@ using UnityEngine.EventSystems;
 
 public enum BallColor
 {
-    White,
+    White, //try standardizing every color into the saving/loading script, using foreach
     Red,
     Yellow,
     Green,
