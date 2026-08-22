@@ -1,9 +1,13 @@
 using UnityEngine;
+using UnityEngine.Audio;
 using UnityEngine.SceneManagement;
 
 public class MainMenu : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    [SerializeField]
+    private GameObject adjustPanel;
+
+
     void Start()
     {
 
@@ -14,6 +18,8 @@ public class MainMenu : MonoBehaviour
     {
 
     }
+
+
 
     public void StartNewGame()
     {
@@ -27,8 +33,16 @@ public class MainMenu : MonoBehaviour
         SceneManager.LoadScene("Loading");
     }
 
+
+
+
     public void ExitGame()
     {
         Application.Quit();
+    }
+
+    public void ShowHideAdjustPanel(bool show)
+    {
+        adjustPanel.SetActive(show);
     }
 }
