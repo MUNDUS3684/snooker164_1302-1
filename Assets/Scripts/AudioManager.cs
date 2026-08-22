@@ -10,7 +10,7 @@ public class AudioManager : MonoBehaviour
     private AudioSource[] sfx;
 
     [SerializeField]
-    private AudioMixer mixer;
+    private AudioMixer mixer; //find way to save volume
 
     [SerializeField]
     public static AudioManager instance;
@@ -58,5 +58,12 @@ public class AudioManager : MonoBehaviour
     public void AdjustMasterVolume(float volume)
     {
         mixer.SetFloat("master", volume);
+        PlayerPrefs.SetFloat("master", volume);
+        PlayerPrefs.Save();
+    }
+
+    public float LoadCurrentMasterVolume()
+    {
+        return PlayerPrefs.GetFloat("master", 0f); //0f is the default value if the key doesn't exist
     }
 }

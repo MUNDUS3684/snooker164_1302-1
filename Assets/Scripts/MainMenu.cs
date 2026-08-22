@@ -10,7 +10,8 @@ public class MainMenu : MonoBehaviour
 
     void Start()
     {
-
+        AudioManager.instance.LoadCurrentMasterVolume();
+        AudioManager.instance.PlayBGM(0);
     }
 
     // Update is called once per frame
