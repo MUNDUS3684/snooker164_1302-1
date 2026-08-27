@@ -7,7 +7,6 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private int playerScore;
     public int PlayerScore { get { return playerScore; } set { playerScore = value; } }
-
     public int BallScore { get; set; }
 
     [SerializeField]
