@@ -110,11 +110,6 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
-        if (gameOver)
-        {
-            return;
-        }
-
         if (Keyboard.current == null)
         {
             return;
@@ -122,7 +117,30 @@ public class GameManager : MonoBehaviour
 
         if (Keyboard.current.escapeKey.wasPressedThisFrame)
         {
-            SaveAndReturnToTitle();
+            if (cueball != null)
+            {
+                Rigidbody rb = cueball.GetComponent<Rigidbody>();
+
+                if (rb != null && rb.linearVelocity.magnitude >= 0.1f)
+                {
+                    return;
+                }
+            }
+
+            if (gameOver)
+            {
+                ReturnToTitle();
+            }
+            else
+            {
+                SaveAndReturnToTitle();
+            }
+
+            return;
+        }
+
+        if (gameOver)
+        {
             return;
         }
 
@@ -526,6 +544,7 @@ public class GameManager : MonoBehaviour
     {
         if (gameOver)
         {
+            ReturnToTitle();
             return;
         }
 
@@ -602,7 +621,7 @@ public class GameManager : MonoBehaviour
                 ballRb.angularVelocity = Vector3.zero;
             }
 
-            string key = "BallPos_" + ball.Color;
+          string key = "BallPos_" + ball.Color;
 
             PlayerPrefs.SetFloat(
                 key + "_X",
