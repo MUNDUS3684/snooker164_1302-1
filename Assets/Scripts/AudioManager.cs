@@ -1,69 +1,108 @@
 using UnityEngine;
-using UnityEngine.Audio;
+using UnityEngine.SceneManagement;
 
 public class AudioManager : MonoBehaviour
 {
-    [SerializeField]
-    private AudioSource[] bgm;
-
-    [SerializeField]
-    private AudioSource[] sfx;
-
-    [SerializeField]
-    private AudioMixer mixer; //find way to save volume
-
-    [SerializeField]
     public static AudioManager instance;
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    [Header("BGM")]
+    [SerializeField]
+    private AudioClip[] bgm;
 
-    private void StopAllBGM()
+    [SerializeField]
+    private AudioSource bgmSource;
+
+    private int currentBGM = -1;
+
+    private void Awake()
     {
-        foreach (var background in bgm)
+        if (instance != null && instance != this)
         {
-            background.Stop();
+            Destroy(gameObject);
+            return;
+        }
+
+        instance = this;
+        DontDestroyOnLoad(gameObject);
+
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    private void Start()
+    {
+        LoadCurrentVolume();
+        PlayBGMForScene(SceneManager.GetActiveScene().name);
+    }
+
+    private void OnDestroy()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        PlayBGMForScene(scene.name);
+    }
+
+    private void PlayBGMForScene(string sceneName)
+    {
+        switch (sceneName)
+        {
+            case "Title":
+                PlayBGM(0);
+                break;
+
+            case "Scene01":
+                PlayBGM(1);
+                break;
+
+            case "Loading":
+                break;
         }
     }
 
     public void PlayBGM(int index)
     {
-        StopAllBGM();
+        if (bgm == null || bgm.Length == 0)
+        {
+            return;
+        }
+
         if (index < 0 || index >= bgm.Length)
         {
-            Debug.LogError("Invalid BGM index: " + index);
             return;
         }
-        bgm[index].Play(); //bgm[i].PlayDelayed(2f);
+
+        if (currentBGM == index && bgmSource.isPlaying)
+        {
+            return;
+        }
+
+        currentBGM = index;
+        bgmSource.clip = bgm[index];
+        bgmSource.loop = true;
+        bgmSource.Play();
     }
 
-    public void PlaySFX(int index)
+    public void StopBGM()
     {
-        if (index < 0 || index >= sfx.Length)
-        {
-            Debug.LogError("Invalid SFX index: " + index);
-            return;
-        }
-        sfx[index].PlayOneShot(sfx[index].clip);
+        bgmSource.Stop();
     }
 
     public void AdjustMasterVolume(float volume)
     {
-        mixer.SetFloat("master", volume);
-        PlayerPrefs.SetFloat("master", volume);
+        volume = Mathf.Clamp01(volume);
+
+        bgmSource.volume = volume;
+
+        PlayerPrefs.SetFloat("MasterVolume", volume);
         PlayerPrefs.Save();
     }
 
-    public float LoadCurrentMasterVolume()
+    private void LoadCurrentVolume()
     {
-        return PlayerPrefs.GetFloat("master", 0f); //0f is the default value if the key doesn't exist
+        float volume = PlayerPrefs.GetFloat("MasterVolume", 1f);
+
+        bgmSource.volume = volume;
     }
 }

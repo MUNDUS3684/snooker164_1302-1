@@ -10,21 +10,28 @@ public class Loading : MonoBehaviour
 
     [SerializeField]
     private float waitSecond = 1f;
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+
+    private bool loading = false;
+
+    private void Start()
     {
-        
+        Time.timeScale = 1f;
     }
 
-    // Update is called once per frame
-    void Update()
+    private void Update()
     {
+        if (loading)
+        {
+            return;
+        }
+
         if (waitSecond > 0f)
         {
-            waitSecond -= Time.deltaTime;
+            waitSecond -= Time.unscaledDeltaTime;
         }
         else
         {
+            loading = true;
             StartCoroutine(LoadNewScene());
         }
     }
@@ -33,10 +40,10 @@ public class Loading : MonoBehaviour
     {
         AsyncOperation operation = SceneManager.LoadSceneAsync("Scene01");
 
-        while(!operation.isDone)
+        while (!operation.isDone)
         {
-            slider.value = operation.progress/0.9f;
-            yield return null; //WaitForSeconds(1f);
+            slider.value = operation.progress / 0.9f;
+            yield return null;
         }
     }
 }

@@ -1,25 +1,28 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-
 public enum BallColor
 {
-    White, //try standardizing every color into the saving/loading script, using foreach
+    White,
     Red,
     Yellow,
     Green,
     Brown,
     Blue,
     Pink,
-    Black,
+    Black
 }
-
 
 public class Ball : MonoBehaviour, IPointerClickHandler
 {
     [SerializeField]
     private int point;
-    public int Point { get { return point; } set { point = value; } }
+
+    public int Point
+    {
+        get { return point; }
+        set { point = value; }
+    }
 
     [SerializeField]
     private MeshRenderer rd;
@@ -27,68 +30,74 @@ public class Ball : MonoBehaviour, IPointerClickHandler
     [SerializeField]
     private BallColor color;
 
-    public void OnPointerClick(PointerEventData eventData)
+    public BallColor Color
     {
-        Debug.Log(point);
-        GameManager.instance.PlayerScore += point;
-        Destroy(gameObject);
+        get { return color; }
     }
 
-    void Awake()
+    private void Awake()
     {
         rd = GetComponent<MeshRenderer>();
     }
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    public void OnPointerClick(PointerEventData eventData)
     {
+        if (GameManager.instance == null)
+        {
+            return;
+        }
 
-    }
+        GameManager.instance.AddScore(point);
+        GameManager.instance.RemoveBall(color);
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+        Destroy(gameObject);
     }
 
     public void SetColorAndPoint(BallColor col)
     {
+        color = col;
+
         switch (col)
         {
             case BallColor.White:
                 point = 0;
-                rd.material.color = Color.white;
+                rd.material.color = UnityEngine.Color.white;
                 break;
+
             case BallColor.Red:
                 point = 1;
-                rd.material.color = Color.red;
+                rd.material.color = UnityEngine.Color.red;
                 break;
+
             case BallColor.Yellow:
                 point = 2;
-                rd.material.color = Color.yellow;
+                rd.material.color = UnityEngine.Color.yellow;
                 break;
+
             case BallColor.Green:
                 point = 3;
-                rd.material.color = Color.green;
+                rd.material.color = UnityEngine.Color.green;
                 break;
+
             case BallColor.Brown:
                 point = 4;
-                rd.material.color = Color.brown;
+                rd.material.color = new UnityEngine.Color(0.59f, 0.29f, 0.1f);
                 break;
+
             case BallColor.Blue:
                 point = 5;
-                rd.material.color = Color.blue;
+                rd.material.color = UnityEngine.Color.blue;
                 break;
+
             case BallColor.Pink:
                 point = 6;
-                rd.material.color = Color.pink;
+                rd.material.color = new UnityEngine.Color(1f, 0.4f, 0.7f);
                 break;
+
             case BallColor.Black:
                 point = 7;
-                rd.material.color = Color.black;
+                rd.material.color = UnityEngine.Color.black;
                 break;
         }
     }
-
-   
 }

@@ -1,41 +1,37 @@
 using UnityEngine;
-using UnityEngine.Audio;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class MainMenu : MonoBehaviour
 {
     [SerializeField]
     private GameObject adjustPanel;
 
+    [SerializeField]
+    private Slider bgmSlider;
 
-    void Start()
+    private void Start()
     {
-        AudioManager.instance.LoadCurrentMasterVolume();
-        AudioManager.instance.PlayBGM(0);
+        float volume = PlayerPrefs.GetFloat("MasterVolume", 1f);
+        bgmSlider.value = volume;
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
-
-
 
     public void StartNewGame()
     {
+        Time.timeScale = 1f;
         Settings.fromSave = false;
         SceneManager.LoadScene("Loading");
     }
 
     public void LoadSavedGame()
     {
-        Settings.fromSave = true;
-        SceneManager.LoadScene("Loading");
+        if (PlayerPrefs.GetInt("HasSaveGame", 0) == 1)
+        {
+            Time.timeScale = 1f;
+            Settings.fromSave = true;
+            SceneManager.LoadScene("Loading");
+        }
     }
-
-
-
 
     public void ExitGame()
     {
@@ -51,5 +47,4 @@ public class MainMenu : MonoBehaviour
     {
         AudioManager.instance.AdjustMasterVolume(volume);
     }
-
 }
